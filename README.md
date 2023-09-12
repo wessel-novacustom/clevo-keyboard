@@ -9,7 +9,7 @@ Apart from this change, we added a script below to automatically install the sof
 To install the software automatically, open a terminal and execute:
 
 ```sh
-wget https://novacustom.com/vendorfirmware/kb.sh && chmod +x kb.sh && sudo ./kb.sh
+wget https://github.com/wessel-novacustom/clevo-keyboard/raw/master/kb.sh && chmod +x kb.sh && sudo ./kb.sh
 ```
 
 After the installation, reboot the laptop in order to make the application work. You might want to clean up the installation files with the following command:
