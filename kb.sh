@@ -1,6 +1,6 @@
 #!/bin/bash
 apt install -y git dkms build-essential linux-headers-$(uname -r)
-rm -rf ~/tuxedo-keyboard
+rm -rf ~/clevo-keyboard
 rmmod clevo_acpi
 rmmod clevo_wmi
 rmmod tuxedo_io
@@ -15,11 +15,11 @@ dnf -y install dkms
 dnf -y install kernel-headers
 dnf -y install kernel-devel
 git clone https://github.com/wessel-novacustom/clevo-keyboard
-cd tuxedo-keyboard/
+cd clevo-keyboard/
 make clean
 sudo make dkmsinstall
 echo tuxedo_keyboard >> /etc/modules
 modprobe tuxedo_keyboard
 echo "options tuxedo_keyboard color=WHITE" > /etc/modprobe.d/tuxedo_keyboard.conf
-rm -rf ~/tuxedo-keyboard
+rm -rf ~/clevo-keyboard
 exit 0
