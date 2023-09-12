@@ -14,7 +14,9 @@ To install the software automatically, open a terminal and execute:
 wget https://github.com/wessel-novacustom/clevo-keyboard/raw/master/kb.sh && chmod +x kb.sh && sudo ./kb.sh
 ```
 
-After the installation, reboot the laptop in order to make the application work. You might want to clean up the installation files with the following command:
+After the installation, reboot the laptop in order to make the application work. You can change the keyboard illumination settings by holding the Fn key and use the keyboard control keys on the right side of your keyboard.
+
+You might want to clean up the installation files with the following command:
 
 ```sh
 sudo rm -rf ~/tuxedo-keyboard/ && rm ~/kb.sh
