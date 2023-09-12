@@ -2,7 +2,7 @@
 
 General Clevo compatibility: Regular Clevo laptops do not have modified UEFI firmware variables like the manufacturer name. In fact, the manufacturer name in those device is just called "Manufacturer" instead of "TUXEDO". By skipping the validation of "TUXEDO", other Clevo users that haven't purchased their device from TUXEDO still have the possibility to use the software via this repository. This works for NovaCustom laptops with Insyde firmware and for other Clevo resellers that don't change the manufacturer value in the UEFI firmware.
 
-Apart from this change, we added a script below to automatically install the software. Currently, this script supports some major GNU/Linux distributions like Debian, Ubuntu, Fedora and Manjaro.
+Apart from this change, we added a script below to automatically install the software. Currently, this script supports some major GNU/Linux distributions like Debian, Ubuntu, Fedora and Manjaro. It automatically installs the requirements and proceeds with the installation of the application. Also, it sets the default keyboard color to white.
 
 ## Automated installation
 
@@ -17,6 +17,15 @@ After the installation, reboot the laptop in order to make the application work.
 ```sh
 sudo rm -rf ~/tuxedo-keyboard/ && rm ~/kb.sh
 ```
+
+## Change the default color
+
+To change the default color of the keyboard backlight, execute:
+
+```sh
+echo "options tuxedo_keyboard color=WHITE" > /etc/modprobe.d/tuxedo_keyboard.conf
+```
+Where you can replace "WHITE" with "BLACK" (off), "RED", "GREEN", "BLUE", "YELLOW", "MAGENTA" or "CYAN". As an alternative, you can set your own color HEX code like "0xFFFF00".
 
 ## A special note for Dasharo coreboot firmware users
 
