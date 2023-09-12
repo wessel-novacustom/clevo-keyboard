@@ -22,7 +22,11 @@ sudo rm -rf ~/tuxedo-keyboard/ && rm ~/kb.sh
 
 <a href="https://configurelaptop.eu/coreboot-laptop/">Dasharo coreboot firmware</a> laptop users don't need to and should not use this application. This also applies for users of other coreboot firmware distributions. The keyboard backlight control is already included in the firmware for that firmware version.
 
+---
+
 # Original unchanged content below
+
+---
 
 # Table of Content
 - <a href="#description">Description</a>
