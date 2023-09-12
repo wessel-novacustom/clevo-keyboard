@@ -1,3 +1,5 @@
+<img src="https://github.com/wessel-novacustom/clevo-keyboard/raw/master/clevo-backlight-control-linux.png" align="right" width="450" />
+
 # The change we made
 
 General Clevo compatibility: Regular Clevo laptops do not have modified UEFI firmware variables like the manufacturer name. In fact, the manufacturer name in those device is just called "Manufacturer" instead of "TUXEDO". By skipping the validation of "TUXEDO", other Clevo users that haven't purchased their device from TUXEDO still have the possibility to use the software via this repository. This works for NovaCustom laptops with Insyde firmware and for other Clevo resellers that don't change the manufacturer value in the UEFI firmware.
