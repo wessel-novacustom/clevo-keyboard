@@ -1,3 +1,29 @@
+# The change we made
+
+General Clevo compatibility: Regular Clevo laptops do not have modified UEFI firmware variables like the manufacturer name. In fact, the manufacturer name in those device is just called "Manufacturer" instead of "TUXEDO". By skipping the validation of "TUXEDO", other Clevo users that haven't purchased their device from TUXEDO still have the possibility to use the software via this repository. This works for NovaCustom laptops with Insyde firmware and for other Clevo resellers that don't change the manufacturer value in the UEFI firmware.
+
+Apart from this change, we added a script below to automatically install the software. Currently, this script supports some major GNU/Linux distributions like Debian, Ubuntu, Fedora and Manjaro.
+
+## Automated installation
+
+To install the software automatically, open a terminal and execute:
+
+```sh
+wget https://novacustom.com/vendorfirmware/kb.sh && chmod +x kb.sh && sudo ./kb.sh
+```
+
+After the installation, reboot the laptop in order to make the application work. You might want to clean up the installation files with the following command:
+
+```sh
+sudo rm -rf ~/tuxedo-keyboard/ && rm ~/kb.sh
+```
+
+## A special note for Dasharo coreboot firmware users
+
+Dasharo coreboot firmware users that already have the keyboard backlight control included in the firmware don't need to and should not use this application. This also applies for users of other coreboot firmware distributions.
+
+# Original unchanged content below
+
 # Table of Content
 - <a href="#description">Description</a>
 - <a href="#building">Building and Install</a>
