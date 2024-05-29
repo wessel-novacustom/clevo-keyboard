@@ -20,7 +20,7 @@ check_fedora () {
 
 
 cleanup () {
-    rm -rf ~/clevo-keyboar
+    rm -rf ~/clevo-keyboard
 }
 
 
