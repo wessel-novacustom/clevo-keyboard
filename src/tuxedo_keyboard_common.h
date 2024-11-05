@@ -61,7 +61,7 @@ void tuxedo_keyboard_remove_driver(struct tuxedo_keyboard_driver *tk_driver);
 /**
  * Basically a copy of the existing report event but doesn't report unknown events
  */
-bool sparse_keymap_report_known_event(struct input_dev *dev, unsigned int code,
+inline bool sparse_keymap_report_known_event(struct input_dev *dev, unsigned int code,
 					unsigned int value, bool autorelease)
 {
 	const struct key_entry *ke =
