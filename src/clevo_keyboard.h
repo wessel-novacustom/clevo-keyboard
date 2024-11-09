@@ -19,6 +19,7 @@
 #ifndef CLEVO_KEYBOARD_H
 #define CLEVO_KEYBOARD_H
 
+#include <linux/version.h>
 #include "tuxedo_keyboard_common.h"
 #include "clevo_interfaces.h"
 #include "clevo_leds.h"
@@ -358,12 +359,20 @@ static void clevo_keyboard_remove_device_interface(struct platform_device *dev)
 	}
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0)
 static int clevo_keyboard_remove(struct platform_device *dev)
 {
 	clevo_keyboard_remove_device_interface(dev);
 	clevo_leds_remove(dev);
 	return 0;
 }
+#else
+static void clevo_keyboard_remove(struct platform_device *dev)
+{
+	clevo_keyboard_remove_device_interface(dev);
+	clevo_leds_remove(dev);
+}
+#endif
 
 static int clevo_keyboard_suspend(struct platform_device *dev, pm_message_t state)
 {

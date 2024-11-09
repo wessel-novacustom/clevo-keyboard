@@ -1214,7 +1214,11 @@ static int uniwill_keyboard_probe(struct platform_device *dev)
 	return 0;
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0)
 static int uniwill_keyboard_remove(struct platform_device *dev)
+#else
+static void uniwill_keyboard_remove(struct platform_device *dev)
+#endif
 {
 	if (uw_charging_prio_loaded)
 		sysfs_remove_group(&dev->dev.kobj, &uw_charging_prio_attr_group);
@@ -1238,8 +1242,9 @@ static int uniwill_keyboard_remove(struct platform_device *dev)
 
 	// Disable manual mode
 	uniwill_write_ec_ram(0x0741, 0x00);
-
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0)
 	return 0;
+#endif
 }
 
 static int uniwill_keyboard_suspend(struct platform_device *dev, pm_message_t state)
