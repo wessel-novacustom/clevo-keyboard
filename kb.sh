@@ -3,22 +3,36 @@ if [ "$EUID" -ne 0 ]; then
   echo "This script requires root rights. Execute it with sudo."
   exit 1
 fi
-apt install -y git dkms build-essential linux-headers-$(uname -r)
+
+# Function to detect Linux distribution and install packages accordingly
+install_packages() {
+  if [ -f /etc/arch-release ]; then
+    echo "Detected Arch Linux or derivative"
+    pacman -Sy --noconfirm git dkms base-devel
+    pacman install $(pacman list --quiet --installed | grep "^linux[0-9]*[-rt]*$" | awk '{print $1"-headers"}' ORS=' ')
+  elif [ -f /etc/debian_version ]; then
+    echo "Detected Debian/Ubuntu or derivative"
+    apt update && apt install -y git dkms build-essential linux-headers-$(uname -r)
+  elif [ -f /etc/redhat-release ]; then
+    echo "Detected Fedora/RHEL/CentOS or derivative"
+    dnf -y group install "C Development Tools and Libraries"
+    dnf -y group install "Development Tools"
+    dnf -y install git dkms kernel-headers kernel-devel
+  else
+    echo "Unsupported Linux distribution."
+    exit 1
+  fi
+}
+
+# Install required packages
+install_packages
+
 rm -rf ~/clevo-keyboard
 rmmod clevo_acpi
 rmmod clevo_wmi
 rmmod tuxedo_io
 rmmod tuxedo_keyboard
 rm /etc/modprobe.d/tuxedo_keyboard.conf
-pacman -S base-devel
-pacman -S dkms
-pamac install $(pamac list --quiet --installed | grep "^linux[0-9]*[-rt]*$" | awk '{print $1"-headers"}' ORS=' ')
-dnf -y group install "C Development Tools and Libraries"
-dnf -y group install "Development Tools"
-dnf -y install git
-dnf -y install dkms
-dnf -y install kernel-headers
-dnf -y install kernel-devel
 git clone https://github.com/wessel-novacustom/clevo-keyboard
 cd clevo-keyboard/
 make clean
