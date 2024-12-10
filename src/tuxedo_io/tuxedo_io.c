@@ -112,7 +112,7 @@ static int tdp_max_gmxpxxx[] = { 0x82, 0x82, 0xc8 };
 static int *tdp_min_defs = NULL;
 static int *tdp_max_defs = NULL;
 
-void uw_id_tdp(void)
+static void uw_id_tdp(void)
 {
 	if (uw_feats->model == UW_MODEL_PH4TUX) {
 		tdp_min_defs = tdp_min_ph4tux;
