@@ -18,6 +18,10 @@ install_packages() {
     dnf -y group install "C Development Tools and Libraries"
     dnf -y group install "Development Tools"
     dnf -y install git dkms kernel-headers kernel-devel
+  elif [[ "$(lsb_release -si)" == "openSUSE" ]]; then
+    echo "Detected openSUSE"
+    sudo zypper in -y -t pattern devel_C_C++
+    sudo zypper in -y git dkms kernel-headers kernel-devel
   else
     echo "Unsupported Linux distribution."
     exit 1
