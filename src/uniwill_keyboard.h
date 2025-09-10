@@ -30,6 +30,7 @@
 #include <linux/led-class-multicolor.h>
 #include <linux/string.h>
 #include <linux/version.h>
+#include <linux/timer.h>
 #include "uniwill_interfaces.h"
 #include "uniwill_leds.h"
 
@@ -366,13 +367,21 @@ static void uw_kbd_bl_init_ready_check_work_func(struct work_struct *work)
 
 	if (prev_colors_same) {
 		uw_kbd_bl_init_set(uw_kbd_bl_init_ready_check_work_func_args_dev);
-		del_timer(&uw_kbd_bl_init_timer);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 6, 0)
+    timer_shutdown_sync(&uw_kbd_bl_init_timer);
+#else
+    del_timer(&uw_kbd_bl_init_timer);
+#endif
 	} else {
 		if (uw_kbd_bl_check_count != 0) {
 			mod_timer(&uw_kbd_bl_init_timer, jiffies + msecs_to_jiffies(uw_kbd_bl_init_check_interval_ms));
 		} else {
 			TUXEDO_INFO("uw kbd init timeout, failed to detect end of boot animation\n");
-			del_timer(&uw_kbd_bl_init_timer);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 6, 0)
+      timer_shutdown_sync(&uw_kbd_bl_init_timer);
+#else
+      del_timer(&uw_kbd_bl_init_timer);
+#endif
 		}
 	}
 
@@ -1235,7 +1244,11 @@ static void uniwill_keyboard_remove(struct platform_device *dev)
 
 	unregister_keyboard_notifier(&keyboard_notifier_block);
 
-	del_timer(&uw_kbd_bl_init_timer);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 6, 0)
+  timer_shutdown_sync(&uw_kbd_bl_init_timer);
+#else
+  del_timer(&uw_kbd_bl_init_timer);
+#endif
 
 	if (uw_lightbar_loaded)
 		uw_lightbar_remove(dev);
