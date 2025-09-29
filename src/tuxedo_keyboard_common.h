@@ -21,6 +21,7 @@
 
 #include <linux/module.h>
 #include <linux/kernel.h>
+#include <linux/version.h>
 #include <linux/acpi.h>
 #include <linux/dmi.h>
 #include <linux/platform_device.h>

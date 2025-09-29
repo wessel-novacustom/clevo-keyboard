@@ -120,7 +120,7 @@ init_driver_exit:
 }
 EXPORT_SYMBOL(tuxedo_keyboard_init_driver);
 
-static void __exit tuxedo_input_exit(void)
+static void tuxedo_input_exit(void)
 {
 	if (unlikely(!tuxedo_input_device)) {
 		return;
@@ -329,7 +329,11 @@ static const struct x86_cpu_id skip_tuxedo_dmi_string_check_match[] __initconst 
 	X86_MATCH_VFM(INTEL_ATOM_SILVERMONT_D, NULL),
 	X86_MATCH_VFM(INTEL_ATOM_SILVERMONT_MID, NULL),
 	X86_MATCH_VFM(INTEL_ATOM_AIRMONT, NULL),
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 15, 0)
 	X86_MATCH_VFM(INTEL_ATOM_AIRMONT_MID, NULL),
+#else
+  X86_MATCH_VFM(INTEL_ATOM_SILVERMONT_MID2, NULL),
+#endif
 	X86_MATCH_VFM(INTEL_ATOM_AIRMONT_NP, NULL),
 	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT, NULL),
 	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_D, NULL),
@@ -403,7 +407,10 @@ static int __init tuxedo_keyboard_init(void)
 	return 0;
 }
 
-static void __exit tuxedo_keyboard_exit(void)
+/*
+ * 6.16+ strictly enforces that __exit functions cannot call non-__exit functions.
+ */
+static void tuxedo_keyboard_exit(void)
 {
 	TUXEDO_INFO("module exit\n");
 
