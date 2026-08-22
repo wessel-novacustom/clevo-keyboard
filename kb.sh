@@ -56,7 +56,17 @@ sed -i "s/DMI_MATCH(DMI_CHASSIS_VENDOR, .*)/DMI_MATCH(DMI_CHASSIS_VENDOR, \"$cha
 cat $file
 cd ..
 make dkmsinstall
-echo tuxedo_keyboard >> /etc/modules
+if [ -d /etc/modules-load.d ]; then
+  if grep tuxedo_keyboard /etc/modules-load.d/*i > /dev/null 2>&1; then
+    : # tuxedo_keyboard will be loaded allready
+  else
+    echo tuxedo_keyboard >> /etc/modules-load.d/tuxedo
+  fi
+elif [ -f /etc/modules ] && grep tuxedo_keyboard /etc/modules > /dev/null 2>&1; then
+  : # tuxedo_keyboard will be loaded allready
+else
+  echo tuxedo_keyboard >> /etc/modules-load.d/tuxedo
+fi
 modprobe tuxedo_keyboard
 echo "options tuxedo_keyboard color=WHITE" > /etc/modprobe.d/tuxedo_keyboard.conf
 rm -rf ~/clevo-keyboard
