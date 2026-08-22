@@ -22,12 +22,16 @@ install_packages() {
     echo "Detected openSUSE"
     sudo zypper in -y -t pattern devel_C_C++
     sudo zypper in -y git dkms kernel-headers kernel-devel
+  elif [ -f /etc/os-release -a "$(grep -E '^ID=' /etc/os-release)" == "ID='gentoo'" ]; then
+    echo "Detected gentoo"
+    emerge -n dev-vcs/git sys-kernel/dkms
   else
     echo "Unsupported Linux distribution."
     exit 1
   fi
 }
 
+cd ~
 # Install required packages
 install_packages
 
@@ -38,7 +42,7 @@ rmmod tuxedo_io
 rmmod tuxedo_keyboard
 rm /etc/modprobe.d/tuxedo_keyboard.conf
 git clone https://github.com/wessel-novacustom/clevo-keyboard
-cd clevo-keyboard/
+cd ~/clevo-keyboard
 make clean
 cd src
 file="tuxedo_keyboard.c"
