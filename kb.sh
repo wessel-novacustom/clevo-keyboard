@@ -22,12 +22,16 @@ install_packages() {
     echo "Detected openSUSE"
     sudo zypper in -y -t pattern devel_C_C++
     sudo zypper in -y git dkms kernel-headers kernel-devel
+  elif [ -f /etc/os-release -a "$(grep -E '^ID=' /etc/os-release)" == "ID='gentoo'" ]; then
+    echo "Detected gentoo"
+    emerge -n dev-vcs/git sys-kernel/dkms
   else
     echo "Unsupported Linux distribution."
     exit 1
   fi
 }
 
+cd ~
 # Install required packages
 install_packages
 
@@ -38,7 +42,7 @@ rmmod tuxedo_io
 rmmod tuxedo_keyboard
 rm /etc/modprobe.d/tuxedo_keyboard.conf
 git clone https://github.com/wessel-novacustom/clevo-keyboard
-cd clevo-keyboard/
+cd ~/clevo-keyboard
 make clean
 cd src
 file="tuxedo_keyboard.c"
@@ -52,7 +56,17 @@ sed -i "s/DMI_MATCH(DMI_CHASSIS_VENDOR, .*)/DMI_MATCH(DMI_CHASSIS_VENDOR, \"$cha
 cat $file
 cd ..
 make dkmsinstall
-echo tuxedo_keyboard >> /etc/modules
+if [ -d /etc/modules-load.d ]; then
+  if grep tuxedo_keyboard /etc/modules-load.d/*i > /dev/null 2>&1; then
+    : # tuxedo_keyboard will be loaded allready
+  else
+    echo tuxedo_keyboard >> /etc/modules-load.d/tuxedo
+  fi
+elif [ -f /etc/modules ] && grep tuxedo_keyboard /etc/modules > /dev/null 2>&1; then
+  : # tuxedo_keyboard will be loaded allready
+else
+  echo tuxedo_keyboard >> /etc/modules-load.d/tuxedo
+fi
 modprobe tuxedo_keyboard
 echo "options tuxedo_keyboard color=WHITE" > /etc/modprobe.d/tuxedo_keyboard.conf
 rm -rf ~/clevo-keyboard
