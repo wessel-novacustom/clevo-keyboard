@@ -56,16 +56,15 @@ sed -i "s/DMI_MATCH(DMI_CHASSIS_VENDOR, .*)/DMI_MATCH(DMI_CHASSIS_VENDOR, \"$cha
 cat $file
 cd ..
 make dkmsinstall
+# Load tuxedo_keyboard at boot. modules-load.d only reads files ending in
+# ".conf" (see modules-load.d(5)); fall back to /etc/modules without it.
+tk_line='^[[:space:]]*tuxedo_keyboard([[:space:]]|$)'
 if [ -d /etc/modules-load.d ]; then
-  if grep tuxedo_keyboard /etc/modules-load.d/*i > /dev/null 2>&1; then
-    : # tuxedo_keyboard will be loaded allready
-  else
-    echo tuxedo_keyboard >> /etc/modules-load.d/tuxedo
+  if ! grep -qsE "$tk_line" /etc/modules-load.d/*.conf; then
+    echo tuxedo_keyboard >> /etc/modules-load.d/tuxedo_keyboard.conf
   fi
-elif [ -f /etc/modules ] && grep tuxedo_keyboard /etc/modules > /dev/null 2>&1; then
-  : # tuxedo_keyboard will be loaded allready
-else
-  echo tuxedo_keyboard >> /etc/modules-load.d/tuxedo
+elif ! grep -qsE "$tk_line" /etc/modules; then
+  echo tuxedo_keyboard >> /etc/modules
 fi
 modprobe tuxedo_keyboard
 echo "options tuxedo_keyboard color=WHITE" > /etc/modprobe.d/tuxedo_keyboard.conf
